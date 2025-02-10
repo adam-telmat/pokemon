@@ -1,0 +1,21 @@
+from enum import Enum
+
+class PokemonType(Enum):
+    NORMAL = "Normal"
+    FEU = "Feu"
+    EAU = "Eau"
+    PLANTE = "Plante"
+    ELECTRIK = "Electrik"
+    GLACE = "Glace"
+    COMBAT = "Combat"
+    POISON = "Poison"
+    SOL = "Sol"
+    VOL = "Vol"
+    PSY = "Psy"
+    INSECTE = "Insecte"
+    ROCHE = "Roche"
+    SPECTRE = "Spectre"
+    DRAGON = "Dragon"
+    TENEBRES = "Ténèbres"
+    ACIER = "Acier"
+    FEE = "Fée" 
