@@ -1,0 +1,183 @@
+{
+    "pikachu": {
+        "name": "pikachu",
+        "pokedex_id": 25,
+        "types": [
+            "electric"
+        ],
+        "max_hp": 35,
+        "attack": 55,
+        "defense": 40,
+        "special_attack": 50,
+        "special_defense": 50,
+        "speed": 90,
+        "moves": [
+            {
+                "name": "mega-punch",
+                "power": 80,
+                "accuracy": 85,
+                "pp": 20,
+                "type": "normal",
+                "damage_class": "physical"
+            },
+            {
+                "name": "pay-day",
+                "power": 40,
+                "accuracy": 100,
+                "pp": 20,
+                "type": "normal",
+                "damage_class": "physical"
+            },
+            {
+                "name": "thunder-punch",
+                "power": 75,
+                "accuracy": 100,
+                "pp": 15,
+                "type": "electric",
+                "damage_class": "physical"
+            },
+            {
+                "name": "slam",
+                "power": 80,
+                "accuracy": 75,
+                "pp": 20,
+                "type": "normal",
+                "damage_class": "physical"
+            }
+        ],
+        "abilities": [
+            "static",
+            "lightning-rod"
+        ],
+        "growth_rate": "medium",
+        "habitat": "forest",
+        "is_legendary": false,
+        "is_mythical": false,
+        "front_sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
+        "back_sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/25.png",
+        "animated_front": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/25.gif",
+        "animated_back": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/back/25.gif",
+        "encounters": 1
+    },
+    "charmander": {
+        "name": "charmander",
+        "pokedex_id": 4,
+        "types": [
+            "fire"
+        ],
+        "max_hp": 39,
+        "attack": 52,
+        "defense": 43,
+        "special_attack": 60,
+        "special_defense": 50,
+        "speed": 65,
+        "moves": [
+            {
+                "name": "mega-punch",
+                "power": 80,
+                "accuracy": 85,
+                "pp": 20,
+                "type": "normal",
+                "damage_class": "physical"
+            },
+            {
+                "name": "fire-punch",
+                "power": 75,
+                "accuracy": 100,
+                "pp": 15,
+                "type": "fire",
+                "damage_class": "physical"
+            },
+            {
+                "name": "thunder-punch",
+                "power": 75,
+                "accuracy": 100,
+                "pp": 15,
+                "type": "electric",
+                "damage_class": "physical"
+            },
+            {
+                "name": "scratch",
+                "power": 40,
+                "accuracy": 100,
+                "pp": 35,
+                "type": "normal",
+                "damage_class": "physical"
+            }
+        ],
+        "abilities": [
+            "blaze",
+            "solar-power"
+        ],
+        "growth_rate": "medium-slow",
+        "habitat": "mountain",
+        "is_legendary": false,
+        "is_mythical": false,
+        "front_sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png",
+        "back_sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/4.png",
+        "animated_front": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/4.gif",
+        "animated_back": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/back/4.gif",
+        "encounters": 1
+    },
+    "bulbasaur": {
+        "name": "bulbasaur",
+        "pokedex_id": 1,
+        "types": [
+            "grass",
+            "poison"
+        ],
+        "max_hp": 45,
+        "attack": 49,
+        "defense": 49,
+        "special_attack": 65,
+        "special_defense": 65,
+        "speed": 45,
+        "moves": [
+            {
+                "name": "razor-wind",
+                "power": 80,
+                "accuracy": 100,
+                "pp": 10,
+                "type": "normal",
+                "damage_class": "special"
+            },
+            {
+                "name": "swords-dance",
+                "power": null,
+                "accuracy": null,
+                "pp": 20,
+                "type": "normal",
+                "damage_class": "status"
+            },
+            {
+                "name": "cut",
+                "power": 50,
+                "accuracy": 95,
+                "pp": 30,
+                "type": "normal",
+                "damage_class": "physical"
+            },
+            {
+                "name": "bind",
+                "power": 15,
+                "accuracy": 85,
+                "pp": 20,
+                "type": "normal",
+                "damage_class": "physical"
+            }
+        ],
+        "abilities": [
+            "overgrow",
+            "chlorophyll"
+        ],
+        "growth_rate": "medium-slow",
+        "habitat": "grassland",
+        "is_legendary": false,
+        "is_mythical": false,
+        "front_sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
+        "back_sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/1.png",
+        "animated_front": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/1.gif",
+        "animated_back": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/back/1.gif",
+        "encounters": 1
+    }
+}
