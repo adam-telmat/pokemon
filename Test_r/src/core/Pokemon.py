@@ -1,5 +1,5 @@
 import requests
-from config import POKEAPI_BASE_URL
+from Test_r.src.config import POKEAPI_BASE_URL
 
 class Pokemon:
     """

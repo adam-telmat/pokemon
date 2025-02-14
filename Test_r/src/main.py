@@ -10,7 +10,7 @@ from battle.battle_system import BattleSystem
 from world.world import World
 from pokedex.pokedex import Pokedex
 from gui.gui import GUI
-from Test_r.src.config.config import WINDOW_WIDTH, WINDOW_HEIGHT
+from Test_r.src.config import WINDOW_WIDTH, WINDOW_HEIGHT
 
 class Game:
     def __init__(self):

@@ -4,13 +4,21 @@ from battle.battle_system import BattleSystem
 
 class TestGameComponents(unittest.TestCase):
     def test_pokemon_load(self):
-        # Verify that a known Pokémon loads correctly.
+        """
+        Test that a known Pokémon (e.g., Pikachu) loads correctly
+        and has valid stats.
+        """
         pikachu = Pokemon("pikachu")
         self.assertTrue(pikachu.is_alive())
         self.assertGreater(pikachu.max_hp, 0)
+        self.assertIsInstance(pikachu.types, list)
+        self.assertGreater(len(pikachu.types), 0)
 
     def test_battle_system(self):
-        # Test a simple battle between two Pokémon.
+        """
+        Simulate a simple battle between two Pokémon (Pikachu and Bulbasaur)
+        and verify that the winner and loser are among these two.
+        """
         pikachu = Pokemon("pikachu")
         bulbasaur = Pokemon("bulbasaur")
         battle = BattleSystem()
