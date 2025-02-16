@@ -23,57 +23,96 @@ class BattleWindow:
         self.GREEN = (0, 255, 0)
         self.RED = (255, 0, 0)
         
-        # Créer les Pokémon avec toutes leurs stats
-        self.pokemon1 = Pokemon("pikachu")  # Plus besoin de spécifier les stats
+        # Positions initiales (AVANT load_sprites)
+        self.original_pos1 = (100, 300)  # Position initiale de Pikachu
+        self.original_pos2 = (500, 100)  # Position initiale de Dracaufeu
+        self.current_pos1 = self.original_pos1
+        self.current_pos2 = self.original_pos2
+        
+        # Créer les Pokémon
+        self.pokemon1 = Pokemon("pikachu")
         self.pokemon2 = Pokemon("charizard")
         
-        # Charger les sprites
+        # Variables pour l'animation
+        self.is_attacking = False
+        self.attack_frame = 0
+        
+        # Variables pour l'animation des ailes
+        self.wing_angle = 0
+        self.wing_speed = 0.5
+        self.wing_max_angle = 8
+        self.wing_direction = 1
+        
+        # Variables pour l'animation idle
+        self.idle_frame = 0
+        self.idle_direction = 1
+        self.idle_offset = 0
+        self.idle_max_offset = 10
+        self.idle_speed = 0.5
+        
+        # Référence au sprite original
+        self.original_sprite2 = None
+        
+        # APRÈS avoir initialisé toutes les positions
         self.load_sprites()
         
         # Police
         self.font = pygame.font.Font(None, 36)
         self.small_font = pygame.font.Font(None, 24)
         
-        # Variables pour l'animation
-        self.is_attacking = False
-        self.attack_frame = 0
-        self.original_pos1 = (100, 300)  # Position initiale de Pikachu
-        self.original_pos2 = (500, 100)  # Position initiale de Dracaufeu
-        self.current_pos1 = self.original_pos1
-        self.current_pos2 = self.original_pos2
-        
-        # Clock pour contrôler la vitesse d'animation
+        # Clock
         self.clock = pygame.time.Clock()
         
-        self.selected_move = 0  # Index du move sélectionné
+        self.selected_move = 0
         
     def load_sprites(self):
         try:
-            # Essayer de charger les sprites animés
-            if self.pokemon1.animated_back:
-                response1 = requests.get(self.pokemon1.animated_back)
-            else:
-                response1 = requests.get(self.pokemon1.back_sprite_url)
-                
-            if self.pokemon2.animated_front:
-                response2 = requests.get(self.pokemon2.animated_front)
-            else:
-                response2 = requests.get(self.pokemon2.front_sprite_url)
+            print("Début du chargement des sprites...")  # Debug
+            
+            # Charger les sprites
+            response1 = requests.get(self.pokemon1.back_sprite_url)
+            response2 = requests.get(self.pokemon2.front_sprite_url)
+            
+            if response1.status_code != 200 or response2.status_code != 200:
+                raise Exception("Erreur lors du téléchargement des sprites")
             
             # Convertir en images Pygame
             img1 = BytesIO(response1.content)
             img2 = BytesIO(response2.content)
             
+            # Charger les sprites
             self.sprite1 = pygame.image.load(img1)
             self.sprite2 = pygame.image.load(img2)
             
-            # Agrandir les sprites (×3)
+            if not self.sprite1 or not self.sprite2:
+                raise Exception("Erreur lors du chargement des images")
+            
+            # Agrandir les sprites
             size1 = self.sprite1.get_size()
             size2 = self.sprite2.get_size()
             self.sprite1 = pygame.transform.scale(self.sprite1, (size1[0] * 3, size1[1] * 3))
             self.sprite2 = pygame.transform.scale(self.sprite2, (size2[0] * 3, size2[1] * 3))
+            
+            print("Sprites chargés et redimensionnés")  # Debug
+            
+            # Créer la copie et vérifier qu'elle est valide
+            self.original_sprite2 = self.sprite2.copy()
+            if not self.original_sprite2:
+                raise Exception("Erreur lors de la copie du sprite")
+            
+            print("Copie du sprite créée")  # Debug
+            
+            # Initialiser le rectangle
+            self.sprite2_rect = self.sprite2.get_rect()
+            self.sprite2_rect.center = self.current_pos2
+            
+            print("Chargement des sprites terminé avec succès")  # Debug
+            
         except Exception as e:
-            print(f"Erreur: {e}")
+            print(f"Erreur détaillée lors du chargement des sprites: {e}")
+            # Initialiser avec des valeurs par défaut en cas d'erreur
+            self.original_sprite2 = self.sprite2
+            self.sprite2_rect = self.sprite2.get_rect(center=self.current_pos2)
         
     def draw_health_bar(self, x, y, health, max_health):
         bar_width = 200
@@ -163,6 +202,33 @@ class BattleWindow:
                 self.current_pos1 = self.original_pos1
                 self.current_pos2 = self.original_pos2
 
+    def animate_idle(self):
+        """Animation de flottement et des ailes pour Dracaufeu"""
+        if not self.is_attacking:
+            # Flottement vertical
+            self.idle_offset += self.idle_direction * self.idle_speed
+            if abs(self.idle_offset) >= self.idle_max_offset:
+                self.idle_direction *= -1
+            
+            # Animation des ailes
+            self.wing_angle += self.wing_direction * self.wing_speed
+            if abs(self.wing_angle) >= self.wing_max_angle:
+                self.wing_direction *= -1
+            
+            # Créer une copie rotative du sprite
+            rotated = pygame.transform.rotate(self.original_sprite2, self.wing_angle)
+            
+            # Obtenir le rectangle pour centrer la rotation
+            rect = rotated.get_rect(center=self.current_pos2)
+            
+            # Mettre à jour la position et le sprite
+            self.current_pos2 = (
+                self.original_pos2[0],
+                self.original_pos2[1] + self.idle_offset
+            )
+            self.sprite2 = rotated
+            self.sprite2_rect = rect
+
     def use_move(self):
         move = self.pokemon1.moves[self.selected_move]
         
@@ -204,15 +270,21 @@ class BattleWindow:
                         self.pokemon1.current_hp = self.pokemon1.max_hp
                         self.pokemon2.current_hp = self.pokemon2.max_hp
             
-            # Animer l'attaque
-            self.animate_attack()
+            # Animer l'attaque ou l'idle
+            if self.is_attacking:
+                self.animate_attack()
+            else:
+                self.animate_idle()
             
             # Dessiner
             self.screen.fill(self.WHITE)
             
-            # Dessiner les sprites aux positions actuelles
+            # Dessiner les sprites
             self.screen.blit(self.sprite1, self.current_pos1)
-            self.screen.blit(self.sprite2, self.current_pos2)
+            if hasattr(self, 'sprite2_rect'):
+                self.screen.blit(self.sprite2, self.sprite2_rect)
+            else:
+                self.screen.blit(self.sprite2, self.current_pos2)
             
             # Dessiner les infos des Pokémon
             self.draw_pokemon_info(self.pokemon1, 50, 400, True)
