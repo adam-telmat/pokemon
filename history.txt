@@ -1,0 +1,539 @@
+Battle on 2025-02-18 10:32:27
+Diglett used Cut!
+It dealt 8 damage to Onix!
+Onix used Bind!
+It dealt 26 damage to Diglett!
+Diglett used Cut!
+It dealt 9 damage to Onix!
+Onix used Bind!
+It dealt 12 damage to Diglett!
+Diglett used Cut!
+Diglett's attack missed!
+Onix used Bind!
+It dealt 12 damage to Diglett!
+Diglett used Swords-dance!
+It dealt 0 damage to Onix!
+Onix used Bind!
+Onix's attack missed!
+Diglett used Sand-attack!
+It dealt 0 damage to Onix!
+Onix used Bind!
+It dealt 25 damage to Diglett!
+Diglett fainted!
+
+Battle on 2025-02-18 10:32:42
+Meowth used Scratch!
+It dealt 9 damage to Onix!
+Onix used Bind!
+It dealt 10 damage to Meowth!
+Meowth used Scratch!
+It dealt 10 damage to Onix!
+Onix used Bind!
+It dealt 17 damage to Meowth!
+Meowth used Headbutt!
+It dealt 14 damage to Onix!
+Onix used Bind!
+It dealt 9 damage to Meowth!
+Meowth used Cut!
+It dealt 10 damage to Onix!
+Onix used Bind!
+It dealt 9 damage to Meowth!
+Meowth used Scratch!
+It dealt 18 damage to Onix!
+Onix used Bind!
+It dealt 9 damage to Meowth!
+Meowth used Cut!
+It dealt 23 damage to Onix!
+Onix used Bind!
+It dealt 9 damage to Meowth!
+Meowth used Cut!
+It dealt 11 damage to Onix!
+Onix fainted!
+
+Battle on 2025-02-18 11:03:33
+Gastly used Headbutt!
+It dealt 53 damage to Jigglypuff!
+Jigglypuff used Pound!
+It dealt 79 damage to Gastly!
+Gastly used Thunder-punch!
+It dealt 117 damage to Jigglypuff!
+Jigglypuff fainted!
+
+Battle on 2025-02-18 11:03:35
+Meowth used Pay-day!
+It dealt 40 damage to Gastly!
+Gastly fainted!
+
+Battle on 2025-02-18 11:03:41
+Meowth used Scratch!
+It dealt 21 damage to Paras!
+Paras used Scratch!
+It dealt 32 damage to Meowth!
+Meowth used Scratch!
+It dealt 23 damage to Paras!
+Paras used Headbutt!
+It dealt 60 damage to Meowth!
+Meowth fainted!
+
+Battle on 2025-02-18 11:03:47
+Pidgey used Gust!
+It dealt 18 damage to Paras!
+Paras used Headbutt!
+It dealt 50 damage to Pidgey!
+Pidgey used Gust!
+It dealt 17 damage to Paras!
+Paras used Cut!
+It dealt 37 damage to Pidgey!
+Pidgey used Gust!
+It dealt 18 damage to Paras!
+Paras fainted!
+
+Battle on 2025-02-18 11:03:53
+Pidgey used Razor-wind!
+It dealt 71 damage to Jigglypuff!
+Jigglypuff used Pound!
+It dealt 31 damage to Pidgey!
+Pidgey used Razor-wind!
+It dealt 73 damage to Jigglypuff!
+Jigglypuff used Double-slap!
+Jigglypuff's attack missed!
+Pidgey used Razor-wind!
+It dealt 67 damage to Jigglypuff!
+Jigglypuff fainted!
+
+Battle on 2025-02-18 11:04:04
+Tentacool used Swords-dance!
+It dealt 0 damage to Pidgey!
+Pidgey used Razor-wind!
+It dealt 19 damage to Tentacool!
+Tentacool used Bind!
+It dealt 8 damage to Pidgey!
+Pidgey used Razor-wind!
+It dealt 18 damage to Tentacool!
+Tentacool used Headbutt!
+It dealt 31 damage to Pidgey!
+Pidgey used Razor-wind!
+It dealt 20 damage to Tentacool!
+Tentacool used Swords-dance!
+It dealt 0 damage to Pidgey!
+Pidgey used Razor-wind!
+It dealt 19 damage to Tentacool!
+Tentacool used Headbutt!
+It dealt 32 damage to Pidgey!
+Pidgey used Razor-wind!
+It dealt 18 damage to Tentacool!
+Tentacool fainted!
+
+Battle on 2025-02-18 11:28:56
+Pidgey used Razor-wind!
+It dealt 56 damage to Geodude!
+Geodude used Thunder-punch!
+It dealt 58 damage to Pidgey!
+Pidgey used Razor-wind!
+It dealt 55 damage to Geodude!
+Geodude fainted!
+
+Battle on 2025-02-18 11:43:48
+Meowth used Pay-day!
+It dealt 19 damage to Squirtle!
+Squirtle used Mega-punch!
+It dealt 44 damage to Meowth!
+Meowth used Pay-day!
+It dealt 18 damage to Squirtle!
+Squirtle used Headbutt!
+It dealt 39 damage to Meowth!
+Meowth used Pay-day!
+It dealt 20 damage to Squirtle!
+Squirtle used Mega-punch!
+It dealt 44 damage to Meowth!
+Meowth fainted!
+
+Battle on 2025-02-18 13:38:06
+Mankey used Karate-chop!
+It dealt 31 damage to Krabby!
+Krabby used Swords-dance!
+It dealt 0 damage to Mankey!
+Mankey used Mega-punch!
+It dealt 32 damage to Krabby!
+Krabby used Vice-grip!
+It dealt 69 damage to Mankey!
+Mankey used Mega-punch!
+It dealt 30 damage to Krabby!
+Krabby fainted!
+
+Battle on 2025-02-18 13:38:17
+Mankey used Karate-chop!
+It dealt 33 damage to Sandshrew!
+Sandshrew used Sand-attack!
+It dealt 0 damage to Mankey!
+Mankey used Karate-chop!
+It dealt 29 damage to Sandshrew!
+Sandshrew used Scratch!
+It dealt 34 damage to Mankey!
+Mankey used Karate-chop!
+It dealt 32 damage to Sandshrew!
+Sandshrew used Sand-attack!
+It dealt 0 damage to Mankey!
+Mankey used Karate-chop!
+It dealt 33 damage to Sandshrew!
+Sandshrew fainted!
+
+Battle on 2025-02-18 13:38:22
+Mankey used Karate-chop!
+It dealt 71 damage to Tentacool!
+Tentacool used Swords-dance!
+It dealt 0 damage to Mankey!
+Mankey used Karate-chop!
+It dealt 74 damage to Tentacool!
+Tentacool fainted!
+
+Battle on 2025-02-18 13:38:26
+Mankey used Karate-chop!
+It dealt 50 damage to Oddish!
+Oddish used Swords-dance!
+It dealt 0 damage to Mankey!
+Mankey used Karate-chop!
+It dealt 46 damage to Oddish!
+Oddish fainted!
+
+Battle on 2025-02-18 18:55:20
+Staryu used Headbutt!
+It dealt 41 damage to Spearow!
+Spearow used Razor-wind!
+It dealt 32 damage to Staryu!
+Staryu used Headbutt!
+It dealt 45 damage to Spearow!
+Spearow used Wing-attack!
+It dealt 78 damage to Staryu!
+Staryu fainted!
+
+Battle on 2025-02-18 18:55:22
+Spearow used Whirlwind!
+It dealt 0 damage to Pidgey!
+Pidgey used Razor-wind!
+It dealt 62 damage to Spearow!
+Spearow fainted!
+
+Battle on 2025-02-18 18:55:26
+Rattata used Headbutt!
+It dealt 63 damage to Pidgey!
+Pidgey used Wing-attack!
+It dealt 48 damage to Rattata!
+Rattata used Cut!
+It dealt 49 damage to Pidgey!
+Pidgey fainted!
+
+Battle on 2025-02-18 18:55:28
+Rattata used Tackle!
+It dealt 33 damage to Ekans!
+Ekans used Headbutt!
+It dealt 47 damage to Rattata!
+Rattata fainted!
+
+Battle on 2025-02-18 18:55:32
+Ekans used Bind!
+It dealt 5 damage to Geodude!
+Geodude used Fire-punch!
+It dealt 54 damage to Ekans!
+Ekans used Bind!
+Ekans's attack missed!
+Geodude used Fire-punch!
+It dealt 61 damage to Ekans!
+Ekans fainted!
+
+Battle on 2025-02-18 18:55:45
+Sandshrew used Scratch!
+It dealt 14 damage to Geodude!
+Geodude used Sand-attack!
+It dealt 0 damage to Sandshrew!
+Sandshrew used Scratch!
+It dealt 13 damage to Geodude!
+Geodude used Thunder-punch!
+It dealt 31 damage to Sandshrew!
+Sandshrew used Scratch!
+It dealt 14 damage to Geodude!
+Geodude used Sand-attack!
+It dealt 0 damage to Sandshrew!
+Sandshrew used Scratch!
+It dealt 13 damage to Geodude!
+Geodude used Fire-punch!
+It dealt 30 damage to Sandshrew!
+Sandshrew used Scratch!
+It dealt 14 damage to Geodude!
+Geodude used Thunder-punch!
+It dealt 32 damage to Sandshrew!
+Sandshrew used Scratch!
+It dealt 13 damage to Geodude!
+Geodude used Fire-punch!
+It dealt 31 damage to Sandshrew!
+Sandshrew fainted!
+
+Battle on 2025-02-18 18:55:47
+Meowth used Pay-day!
+It dealt 29 damage to Geodude!
+Geodude fainted!
+
+Battle on 2025-02-18 18:55:52
+Meowth used Pay-day!
+It dealt 29 damage to Charmander!
+Charmander used Fire-punch!
+It dealt 66 damage to Meowth!
+Meowth used Pay-day!
+It dealt 27 damage to Charmander!
+Charmander used Scratch!
+It dealt 27 damage to Meowth!
+Meowth fainted!
+
+Battle on 2025-02-18 18:55:54
+Charmander used Mega-punch!
+It dealt 37 damage to Machop!
+Machop used Mega-punch!
+It dealt 58 damage to Charmander!
+Charmander fainted!
+
+Battle on 2025-02-18 18:56:53
+Squirtle used Mega-punch!
+It dealt 32 damage to Machop!
+Machop used Karate-chop!
+It dealt 40 damage to Squirtle!
+Squirtle used Mega-punch!
+It dealt 34 damage to Machop!
+Machop used Karate-chop!
+It dealt 37 damage to Squirtle!
+Squirtle used Mega-punch!
+It dealt 33 damage to Machop!
+Machop used Mega-punch!
+It dealt 44 damage to Squirtle!
+Squirtle fainted!
+
+Battle on 2025-02-19 07:44:26
+Meowth used Pay-day!
+It dealt 24 damage to Oddish!
+Oddish used Take-down!
+It dealt 55 damage to Meowth!
+Meowth used Pay-day!
+It dealt 21 damage to Oddish!
+Oddish used Headbutt!
+It dealt 91 damage to Meowth!
+Meowth fainted!
+
+Battle on 2025-02-19 07:44:30
+Pidgey used Razor-wind!
+It dealt 30 damage to Oddish!
+Oddish used Cut!
+It dealt 28 damage to Pidgey!
+Pidgey used Razor-wind!
+It dealt 30 damage to Oddish!
+Oddish fainted!
+
+Battle on 2025-02-19 07:44:36
+Pidgey used Razor-wind!
+It dealt 31 damage to Bulbasaur!
+Bulbasaur used Razor-wind!
+It dealt 59 damage to Pidgey!
+Pidgey used Razor-wind!
+It dealt 57 damage to Bulbasaur!
+Bulbasaur used Cut!
+It dealt 28 damage to Pidgey!
+Pidgey used Razor-wind!
+It dealt 30 damage to Bulbasaur!
+Bulbasaur fainted!
+
+Battle on 2025-02-19 07:44:43
+Meowth used Scratch!
+It dealt 29 damage to Pidgey!
+Pidgey used Razor-wind!
+It dealt 43 damage to Meowth!
+Meowth used Cut!
+It dealt 39 damage to Pidgey!
+Pidgey used Razor-wind!
+It dealt 44 damage to Meowth!
+Meowth used Pay-day!
+It dealt 28 damage to Pidgey!
+Pidgey fainted!
+
+Battle on 2025-02-19 07:44:45
+Meowth used Headbutt!
+It dealt 24 damage to Sandshrew!
+Sandshrew used Scratch!
+It dealt 37 damage to Meowth!
+Meowth fainted!
+
+Battle on 2025-02-19 07:44:54
+Sandshrew used Scratch!
+It dealt 24 damage to Machop!
+Machop used Fire-punch!
+It dealt 30 damage to Sandshrew!
+Sandshrew used Scratch!
+It dealt 50 damage to Machop!
+Machop used Fire-punch!
+It dealt 28 damage to Sandshrew!
+Sandshrew used Cut!
+It dealt 29 damage to Machop!
+Machop used Mega-punch!
+It dealt 31 damage to Sandshrew!
+Sandshrew used Cut!
+It dealt 60 damage to Machop!
+Machop fainted!
+
+Battle on 2025-02-19 09:02:47
+Staryu used Headbutt!
+It dealt 29 damage to Geodude!
+Geodude used Sand-attack!
+It dealt 0 damage to Staryu!
+Staryu used Headbutt!
+It dealt 14 damage to Geodude!
+Geodude used Thunder-punch!
+It dealt 87 damage to Staryu!
+Staryu fainted!
+
+Battle on 2025-02-19 09:02:52
+Meowth used Pay-day!
+It dealt 12 damage to Geodude!
+Geodude used Mega-punch!
+It dealt 76 damage to Meowth!
+Meowth used Pay-day!
+It dealt 14 damage to Geodude!
+Geodude used Thunder-punch!
+It dealt 70 damage to Meowth!
+Meowth fainted!
+
+Battle on 2025-02-19 09:02:56
+Sandshrew used Scratch!
+It dealt 14 damage to Geodude!
+Geodude used Fire-punch!
+It dealt 30 damage to Sandshrew!
+Sandshrew used Scratch!
+It dealt 14 damage to Geodude!
+Geodude fainted!
+
+Battle on 2025-02-19 09:09:38
+Onix used Bind!
+It dealt 4 damage to Geodude!
+Geodude used Thunder-punch!
+It dealt 15 damage to Onix!
+Onix used Bind!
+It dealt 4 damage to Geodude!
+Geodude used Mega-punch!
+Geodude's attack missed!
+Onix used Slam!
+It dealt 16 damage to Geodude!
+Geodude used Sand-attack!
+It dealt 0 damage to Onix!
+Onix used Headbutt!
+It dealt 13 damage to Geodude!
+Geodude used Thunder-punch!
+It dealt 16 damage to Onix!
+Onix used Headbutt!
+It dealt 15 damage to Geodude!
+Geodude used Thunder-punch!
+It dealt 18 damage to Onix!
+Onix used Headbutt!
+It dealt 15 damage to Geodude!
+Geodude used Fire-punch!
+It dealt 17 damage to Onix!
+Onix used Headbutt!
+It dealt 13 damage to Geodude!
+Geodude used Sand-attack!
+It dealt 0 damage to Onix!
+Onix used Headbutt!
+It dealt 14 damage to Geodude!
+Geodude fainted!
+
+Battle on 2025-02-19 09:10:07
+Onix used Bind!
+It dealt 3 damage to Onix!
+Onix used Bind!
+It dealt 3 damage to Onix!
+Onix used Bind!
+It dealt 3 damage to Onix!
+Onix used Slam!
+It dealt 20 damage to Onix!
+Onix used Bind!
+It dealt 3 damage to Onix!
+Onix used Headbutt!
+It dealt 9 damage to Onix!
+Onix used Bind!
+It dealt 3 damage to Onix!
+Onix used Slam!
+It dealt 11 damage to Onix!
+Onix used Bind!
+It dealt 3 damage to Onix!
+Onix used Tackle!
+It dealt 13 damage to Onix!
+Onix used Bind!
+Onix's attack missed!
+Onix used Headbutt!
+It dealt 10 damage to Onix!
+Onix used Bind!
+It dealt 3 damage to Onix!
+Onix used Slam!
+It dealt 11 damage to Onix!
+Onix used Slam!
+It dealt 10 damage to Onix!
+Onix used Tackle!
+It dealt 12 damage to Onix!
+Onix fainted!
+
+Battle on 2025-02-19 09:10:18
+Staryu used Take-down!
+It dealt 13 damage to Onix!
+Onix used Slam!
+It dealt 29 damage to Staryu!
+Staryu used Take-down!
+It dealt 12 damage to Onix!
+Onix used Slam!
+Onix's attack missed!
+Staryu used Take-down!
+It dealt 13 damage to Onix!
+Onix used Headbutt!
+It dealt 26 damage to Staryu!
+Staryu used Take-down!
+It dealt 12 damage to Onix!
+Onix used Slam!
+It dealt 28 damage to Staryu!
+Staryu fainted!
+
+Battle on 2025-02-19 09:10:21
+Meowth used Cut!
+It dealt 11 damage to Onix!
+Onix fainted!
+
+Battle on 2025-02-19 09:10:27
+Meowth used Pay-day!
+It dealt 36 damage to Meowth!
+Meowth used Pay-day!
+It dealt 35 damage to Meowth!
+Meowth used Pay-day!
+It dealt 34 damage to Meowth!
+Meowth used Pay-day!
+It dealt 31 damage to Meowth!
+Meowth used Pay-day!
+It dealt 31 damage to Meowth!
+Meowth fainted!
+
+Battle on 2025-02-19 09:10:46
+Meowth used Pay-day!
+It dealt 15 damage to Sandshrew!
+Sandshrew used Swords-dance!
+It dealt 0 damage to Meowth!
+Meowth used Pay-day!
+It dealt 15 damage to Sandshrew!
+Sandshrew used Swords-dance!
+It dealt 0 damage to Meowth!
+Meowth used Cut!
+It dealt 17 damage to Sandshrew!
+Sandshrew used Cut!
+It dealt 48 damage to Meowth!
+Meowth used Headbutt!
+It dealt 24 damage to Sandshrew!
+Sandshrew used Sand-attack!
+It dealt 0 damage to Meowth!
+Meowth used Headbutt!
+It dealt 24 damage to Sandshrew!
+Sandshrew used Swords-dance!
+It dealt 0 damage to Meowth!
+Meowth used Headbutt!
+It dealt 25 damage to Sandshrew!
+Sandshrew fainted!
+
