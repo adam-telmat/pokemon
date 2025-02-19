@@ -247,3 +247,55 @@ class MainMenu:
                             return "QUIT"
             
             self.draw() 
+
+    def ask_trainer_name(self):
+        """Demande et retourne le nom du dresseur"""
+        input_text = ""
+        input_active = True
+        
+        while input_active:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return None
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN and input_text:
+                        return input_text
+                    elif event.key == pygame.K_ESCAPE:
+                        return None
+                    elif event.key == pygame.K_BACKSPACE:
+                        input_text = input_text[:-1]
+                    else:
+                        input_text += event.unicode
+            
+            # Garder le même fond et style
+            self.screen.blit(self.background, (0, 0))
+            
+            # Animation du Pokémon 3D
+            self.pokemon_float += self.pokemon_float_speed
+            offset_y = math.sin(self.pokemon_float) * 20
+            pokemon_y = self.pokemon_pos[1] + offset_y
+            self.screen.blit(self.pokemon_3d, (self.pokemon_pos[0], pokemon_y))
+            
+            # Titre avec le même style
+            title = self.font.render("Entrez votre nom :", True, self.POKEMON_BLUE)
+            title_rect = title.get_rect(center=(self.current_width//2, 500))
+            
+            # Rectangle jaune autour du titre
+            box_rect = title_rect.inflate(60, 40)
+            pygame.draw.rect(self.screen, self.POKEMON_YELLOW, box_rect, border_radius=15)
+            
+            # Afficher le titre
+            self.screen.blit(title, title_rect)
+            
+            # Zone de saisie avec le même style
+            input_surface = self.font.render(input_text + "▌", True, self.POKEMON_BLUE)
+            input_rect = input_surface.get_rect(center=(self.current_width//2, 600))
+            
+            # Rectangle jaune autour de la saisie
+            input_box_rect = input_rect.inflate(60, 40)
+            pygame.draw.rect(self.screen, self.POKEMON_YELLOW, input_box_rect, border_radius=15)
+            
+            # Afficher la saisie
+            self.screen.blit(input_surface, input_rect)
+            
+            pygame.display.flip() 
