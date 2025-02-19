@@ -2,6 +2,8 @@ import requests
 from PIL import Image
 from io import BytesIO
 import random
+from data.pokemon_data import POKEMON_DATA, POKEMON_NAMES_FR, MOVE_NAMES_FR
+from utils.PokemonDataFetcher import PokemonDataFetcher
 
 class Pokemon:
     BASE_API_URL = "https://pokeapi.co/api/v2/pokemon/"
@@ -10,10 +12,26 @@ class Pokemon:
     CATEGORY_API = "https://pokeapi.co/api/v2/move-category/"
     DAMAGE_CLASS_API = "https://pokeapi.co/api/v2/move-damage-class/"
 
-    def __init__(self, name):
-        self.name = name.lower()
-        self.status_condition = None  # Pour les effets d'état
-        self.load_from_api()  # On charge tout depuis l'API
+    def __init__(self, name: str):
+        self.fetcher = PokemonDataFetcher()
+        data = self.fetcher.get_pokemon_data(name)
+        
+        # Initialiser avec les meilleures données des deux sources
+        self.name = name
+        self.sprites = data['sprites']
+        self.stats = data['stats']
+        self.moves = data['moves']
+        self.types = data['types']
+        self.name_fr = POKEMON_NAMES_FR.get(self.name, self.name)
+        self.level = data['level']
+        self.max_hp = data['max_hp']
+        self.current_hp = self.max_hp
+        self.attack = data['attack']
+        self.defense = data['defense']
+        self.special_attack = data['special_attack']
+        self.special_defense = data['special_defense']
+        self.speed = data['speed']
+        self.status_condition = None
 
     def load_from_api(self):
         try:

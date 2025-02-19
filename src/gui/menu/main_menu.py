@@ -2,43 +2,60 @@ import pygame
 import sys
 import math
 import random
+import os
 
 class MainMenu:
     def __init__(self):
+        # Position de fenêtre avant d'initialiser pygame
+        os.environ['SDL_VIDEO_WINDOW_POS'] = '5,38'
+        
         pygame.init()
-        self.screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
+        
+        # Récupérer la taille de l'écran
+        info = pygame.display.Info()
+        screen_width = info.current_w
+        screen_height = info.current_h
+        
+        # Marges comme dans test_black_screen
+        margin_sides = 5
+        margin_top = 30
+        margin_bottom = 60
+        
+        # Calculer les dimensions de la fenêtre
+        window_width = screen_width - (margin_sides * 2)
+        window_height = screen_height - (margin_top + margin_bottom)
+        
+        # Créer la fenêtre
+        self.screen = pygame.display.set_mode((window_width, window_height))
         pygame.display.set_caption("Pokémon Game")
         
-        # Tailles de l'écran
-        self.current_width = 1920
-        self.current_height = 1080
+        # Garder les dimensions pour le reste du code
+        self.current_width = window_width
+        self.current_height = window_height
         
         try:
-            # Charger l'image de fond sans modification
+            # Charger et redimensionner l'image de fond
             self.background = pygame.image.load("src/assets/pokemon_backgroundfinale.jpg").convert_alpha()
-            self.background = pygame.transform.scale(self.background, (1920, 1080))
+            self.background = pygame.transform.scale(self.background, (window_width, window_height))
             
-            # Charger le Pokémon 3D avec transparence
+            # Charger le Pokémon 3D
             self.pokemon_3d = pygame.image.load("src/assets/pokemon3D2.png").convert_alpha()
-            # Nouvelle taille : plus large (800) et moins haut (400)
             self.pokemon_3d = pygame.transform.scale(self.pokemon_3d, (800, 400))
-            
-            # Position ajustée : plus haut et centré
-            self.pokemon_pos = [1920//2 - 400, -20]  # Centré horizontalement avec la nouvelle largeur
+            self.pokemon_pos = [window_width//2 - 400, -20]
             self.pokemon_float = 0
             self.pokemon_float_speed = 0.05
             
         except Exception as e:
-            print(f"Erreur lors du chargement des images: {e}")
-            self.background = None
-            self.pokemon_3d = None
+            print(f"Erreur lors du chargement de l'image de fond: {e}")
+            self.background = pygame.Surface((window_width, window_height))
+            self.background.fill((0, 0, 0))
         
-        # Uniquement les couleurs emblématiques Pokémon
+        # Couleurs
         self.WHITE = (255, 255, 255)
         self.BLACK = (0, 0, 0)
-        self.POKEMON_YELLOW = (255, 236, 0)      # Jaune vif actuel (parfait)
-        self.POKEMON_BLUE = (0, 144, 255)        # Bleu plus électrique
-        self.POKEMON_BLUE_LIGHT = (30, 170, 255)  # Version plus claire pour la sélection
+        self.POKEMON_YELLOW = (255, 236, 0)      # Jaune vif
+        self.POKEMON_BLUE = (0, 144, 255)        # Bleu de base
+        self.POKEMON_BLUE_LIGHT = (0, 90, 255)   # Bleu plus foncé pour la sélection
         
         # Options du menu
         self.options = [
@@ -62,7 +79,7 @@ class MainMenu:
         try:
             self.logo = pygame.image.load("src/assets/images/pokemon_logo_3d.png")
             self.logo = pygame.transform.scale(self.logo, (600, 300))
-            self.logo_pos = (self.current_width//2 - 300, 50)
+            self.logo_pos = (window_width//2 - 300, 50)
             self.logo_offset = 0
             self.logo_direction = 1
         except:
@@ -114,6 +131,9 @@ class MainMenu:
         }
 
     def draw(self):
+        # Remplir l'écran en noir d'abord pour éviter les bordures blanches
+        self.screen.fill(self.BLACK)
+        
         # Afficher le fond
         if self.background:
             self.screen.blit(self.background, (0, 0))
@@ -130,7 +150,7 @@ class MainMenu:
             # Texte en bleu Pokémon
             color = self.POKEMON_BLUE_LIGHT if i == self.selected else self.POKEMON_BLUE
             text = self.font.render(option, True, color)
-            text_rect = text.get_rect(center=(self.current_width//2, 600 + i * 120))
+            text_rect = text.get_rect(center=(self.current_width//2, 500 + i * 120))
             
             # Rectangle jaune Pokémon
             box_rect = text_rect.inflate(60, 40)
@@ -150,14 +170,19 @@ class MainMenu:
         self.is_fullscreen = not self.is_fullscreen
         if self.is_fullscreen:
             # Passer en plein écran
-            self.screen = pygame.display.set_mode((self.current_width, self.current_height), pygame.FULLSCREEN)
+            self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+            # Obtenir les dimensions réelles de l'écran
+            info = pygame.display.Info()
+            self.current_width = info.current_w
+            self.current_height = info.current_h
+            # Redimensionner le fond pour couvrir tout l'écran
+            self.background = pygame.transform.scale(self.background, (self.current_width, self.current_height))
         else:
             # Revenir en mode fenêtré
-            self.screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
-        # Redimensionner le background
-        self.background = pygame.transform.scale(self.background, 
-            (self.current_width if self.is_fullscreen else 1920, 
-             self.current_height if self.is_fullscreen else 1080))
+            self.screen = pygame.display.set_mode((window_width, window_height), pygame.RESIZABLE)
+            self.current_width = window_width
+            self.current_height = window_height
+            self.background = pygame.transform.scale(self.background, (window_width, window_height))
         
     def run(self):
         running = True
@@ -176,6 +201,33 @@ class MainMenu:
                     self.screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
                     # Redimensionner le background
                     self.background = pygame.transform.scale(self.background, (width, height))
+                    
+                # Ajouter la gestion de la souris
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:  # Clic gauche
+                        mouse_pos = pygame.mouse.get_pos()
+                        for i, option in enumerate(self.options):
+                            text_rect = self.font.render(option, True, (0,0,0)).get_rect(center=(self.current_width//2, 500 + i * 120))
+                            box_rect = text_rect.inflate(60, 40)
+                            if box_rect.collidepoint(mouse_pos):
+                                if i == 0:
+                                    return "NEW_GAME"
+                                elif i == 1:
+                                    return "LOAD_GAME"
+                                elif i == 2:
+                                    return "OPTIONS"
+                                elif i == 3:
+                                    return "QUIT"
+                
+                # Ajouter le survol de la souris
+                elif event.type == pygame.MOUSEMOTION:
+                    mouse_pos = pygame.mouse.get_pos()
+                    for i, option in enumerate(self.options):
+                        text_rect = self.font.render(option, True, (0,0,0)).get_rect(center=(self.current_width//2, 500 + i * 120))
+                        box_rect = text_rect.inflate(60, 40)
+                        if box_rect.collidepoint(mouse_pos):
+                            self.selected = i
+                            break
                     
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_F11:  # F11 pour basculer plein écran
