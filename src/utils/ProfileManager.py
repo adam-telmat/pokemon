@@ -30,6 +30,44 @@ class ProfileManager:
         data = {
             "trainer_name": trainer_name,
             "pokedex": {},
-            "score": 0
+            "score": 0,
+            "defeated_trainers": {
+                "Olga": False,
+                "Aldo": False,
+                "Agatha": False,
+                "Peter": False,
+                "Blue": False
+            },
+            "current_team": [],  # Liste des Pokémon de l'équipe actuelle
+            "badges": 0  # Nombre de badges (dresseurs battus)
         }
-        return ProfileManager.save_profile(data) 
+        return ProfileManager.save_profile(data)
+    
+    @staticmethod
+    def update_defeated_trainer(trainer_name):
+        """Met à jour le statut d'un dresseur battu"""
+        profile = ProfileManager.load_profile()
+        if profile:
+            profile["defeated_trainers"][trainer_name] = True
+            profile["badges"] += 1
+            return ProfileManager.save_profile(profile)
+        return False
+    
+    @staticmethod
+    def get_next_trainer():
+        """Retourne le prochain dresseur à affronter"""
+        profile = ProfileManager.load_profile()
+        if profile:
+            trainer_order = ["Olga", "Aldo", "Agatha", "Peter", "Blue"]
+            for trainer in trainer_order:
+                if not profile["defeated_trainers"][trainer]:
+                    return trainer
+        return None
+    
+    @staticmethod
+    def can_challenge_blue():
+        """Vérifie si le joueur peut affronter Blue (tous les autres battus)"""
+        profile = ProfileManager.load_profile()
+        if profile:
+            return all(profile["defeated_trainers"][t] for t in ["Olga", "Aldo", "Agatha", "Peter"])
+        return False 

@@ -1,17 +1,27 @@
 import pygame
 import math
+import os
+from gui.menu.pokemon_selection import PokemonSelection
+from gui.menu.team_order import TeamOrderMenu
+from gui.menu.league_selection import LeagueSelection
 
 class GameMenu:
-    def __init__(self, screen):
+    def __init__(self, screen, sprite_manager, profile=None):
         self.screen = screen
+        self.sprite_manager = sprite_manager
+        self.profile = profile
         
         # Utiliser les dimensions de l'écran existant
         self.current_width = screen.get_width()
         self.current_height = screen.get_height()
         
+        # Chemin de base pour les assets
+        self.assets_path = os.path.join("src", "assets")
+        
         try:
             # Charger et redimensionner l'image de fond
-            self.background = pygame.image.load("src/assets/pokemon_backgroundfinale.jpg").convert_alpha()
+            background_path = os.path.join(self.assets_path, "pokemon_backgroundfinale.jpg")
+            self.background = pygame.image.load(background_path).convert_alpha()
             self.background = pygame.transform.scale(self.background, (self.current_width, self.current_height))
             
         except Exception as e:
@@ -38,10 +48,11 @@ class GameMenu:
             "Pokédex",    # Pokédex
             "Sac",        # Inventaire
             "Mode Combat", # Nouveau !
-            "Options",     # Changé de "Sauvegarder" à "Options"
-            "Retour"
+            "Options",    # Options
+            "Retour"      # Retour
         ]
         self.selected = 0
+        self.selected_team = None  # Pour stocker l'équipe de Pokémon
 
     def draw(self):
         # Fond
@@ -70,7 +81,27 @@ class GameMenu:
             # Afficher le texte
             self.screen.blit(text, text_rect)
         
+        # Si une équipe est sélectionnée, on peut activer le mode combat
+        if self.selected_team is None:
+            # Griser l'option "Mode Combat"
+            pass
+        else:
+            # Activer l'option "Mode Combat"
+            pass
+        
         pygame.display.flip() 
+
+    def handle_pokemon_selection(self):
+        """Gère la sélection et l'ordre des Pokémon"""
+        pokemon_selection = PokemonSelection(self.screen)
+        pokemon_names = pokemon_selection.run()
+        
+        if pokemon_names and pokemon_names != "BACK":
+            team_order = TeamOrderMenu(self.screen, pokemon_names)
+            order_result = team_order.run()
+            if order_result == "BACK":  # Changé de ORDER_CONFIRMED à BACK
+                self.selected_team = team_order.team  # Sauvegarder l'équipe ordonnée
+        return None
 
     def run(self):
         running = True
@@ -79,7 +110,6 @@ class GameMenu:
                 if event.type == pygame.QUIT:
                     return "QUIT"
                     
-                # Gestion de la souris
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:  # Clic gauche
                         mouse_pos = pygame.mouse.get_pos()
@@ -87,17 +117,17 @@ class GameMenu:
                             text_rect = self.font.render(option, True, (0,0,0)).get_rect(center=(self.current_width//2, 300 + i * 120))
                             box_rect = text_rect.inflate(60, 40)
                             if box_rect.collidepoint(mouse_pos):
-                                if i == 0:  # Pokémon
-                                    return "POKEMON_TEAM"
-                                elif i == 1:  # Pokédex
-                                    return "POKEDEX"
-                                elif i == 2:  # Sac
-                                    return "BAG"
-                                elif i == 3:  # Mode Combat
-                                    return self.open_battle_menu()
-                                elif i == 4:  # Options
-                                    return "OPTIONS"
-                                elif i == 5:  # Retour
+                                if option == "Pokémon":
+                                    self.handle_pokemon_selection()
+                                elif option == "Mode Combat":
+                                    # Ouvrir directement la sélection de la ligue
+                                    league_screen = LeagueSelection(self.screen)
+                                    league_result = league_screen.run()
+                                    if league_result == "BACK":
+                                        continue  # Retour au menu de jeu
+                                    elif isinstance(league_result, dict):
+                                        return league_result  # Retourner le résultat au main.py
+                                elif option == "Retour":
                                     return "BACK"
                 
                 # Survol de la souris
@@ -120,7 +150,7 @@ class GameMenu:
                         self.selected = (self.selected + 1) % len(self.options)
                     elif event.key == pygame.K_RETURN:
                         if self.selected == 0:  # Pokémon
-                            return "POKEMON_TEAM"
+                            return self.handle_pokemon_selection()
                         elif self.selected == 1:  # Pokédex
                             return "POKEDEX"
                         elif self.selected == 2:  # Sac
@@ -138,4 +168,20 @@ class GameMenu:
         """Ouvre le menu de la ligue"""
         from gui.menu.league_selection import LeagueSelection
         league_menu = LeagueSelection(self.screen)
-        return league_menu.run() 
+        return league_menu.run()
+
+    def open_pokemon_selection(self):
+        from gui.menu.pokemon_selection import PokemonSelection
+        pokemon_selection = PokemonSelection(self.screen)
+        result = pokemon_selection.run()
+        
+        if result == "ORDER_CONFIRMED":
+            # Stocker l'équipe ordonnée et continuer dans le menu de jeu
+            self.selected_team = pokemon_selection.get_ordered_team()
+            return None  # Reste dans le menu de jeu
+        elif result == "BACK":
+            return None  # Reste dans le menu de jeu
+        elif result == "QUIT":
+            return "QUIT"
+        
+        return None 
