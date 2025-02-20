@@ -1,0 +1,20 @@
+Game on 2025-02-20 09:16:02
+Outcome: Winner
+Team: Geodude, Psyduck, Mankey, Krabby, Clefairy, Pikachu
+Captured: ekans, tentacool, jigglypuff, charmander
+
+Game on 2025-02-20 09:16:02
+Outcome: Winner
+Team: Geodude, Psyduck, Mankey, Krabby, Clefairy, Pikachu
+Captured: ekans, tentacool, jigglypuff, charmander
+
+Game on 2025-02-20 09:20:35
+Outcome: Winner
+Team: Psyduck, Meowth, Pidgey, Ekans, Sandshrew
+Captured: staryu, vulpix, tentacool, charmander
+
+Game on 2025-02-20 09:20:35
+Outcome: Winner
+Team: Psyduck, Meowth, Pidgey, Ekans, Sandshrew
+Captured: staryu, vulpix, tentacool, charmander
+

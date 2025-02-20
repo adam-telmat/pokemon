@@ -1,0 +1,104 @@
+Battle on 2025-02-20 09:15:52
+Ekans used Headbutt!
+It dealt 18 damage to Geodude!
+Geodude used Mega-punch!
+Geodude's attack missed!
+Ekans used Headbutt!
+It dealt 18 damage to Geodude!
+Geodude used Mega-punch!
+It dealt 58 damage to Ekans!
+Ekans used Slam!
+It dealt 22 damage to Geodude!
+Geodude used Thunder-punch!
+It dealt 60 damage to Ekans!
+Ekans fainted!
+
+Battle on 2025-02-20 09:15:56
+Tentacool used Headbutt!
+It dealt 13 damage to Geodude!
+Geodude used Mega-punch!
+It dealt 79 damage to Tentacool!
+Tentacool used Cut!
+It dealt 10 damage to Geodude!
+Geodude used Mega-punch!
+It dealt 80 damage to Tentacool!
+Tentacool fainted!
+
+Battle on 2025-02-20 09:16:00
+Geodude used Mega-punch!
+It dealt 140 damage to Jigglypuff!
+Jigglypuff used Fire-punch!
+It dealt 15 damage to Geodude!
+Geodude used Mega-punch!
+It dealt 132 damage to Jigglypuff!
+Jigglypuff fainted!
+
+Battle on 2025-02-20 09:16:02
+Charmander used Scratch!
+It dealt 9 damage to Geodude!
+Geodude used Mega-punch!
+It dealt 117 damage to Charmander!
+Charmander fainted!
+
+Battle on 2025-02-20 09:20:10
+Staryu used Take-down!
+It dealt 34 damage to Psyduck!
+Psyduck used Mega-punch!
+It dealt 30 damage to Staryu!
+Staryu used Double-edge!
+It dealt 50 damage to Psyduck!
+Psyduck used Mega-punch!
+It dealt 34 damage to Staryu!
+Staryu used Tackle!
+It dealt 16 damage to Psyduck!
+Psyduck fainted!
+
+Battle on 2025-02-20 09:20:12
+Meowth used Pay-day!
+It dealt 24 damage to Staryu!
+Staryu fainted!
+
+Battle on 2025-02-20 09:20:18
+Meowth used Pay-day!
+It dealt 30 damage to Vulpix!
+Vulpix used Take-down!
+It dealt 42 damage to Meowth!
+Meowth used Pay-day!
+It dealt 30 damage to Vulpix!
+Vulpix used Tackle!
+It dealt 21 damage to Meowth!
+Meowth used Pay-day!
+It dealt 28 damage to Vulpix!
+Vulpix fainted!
+
+Battle on 2025-02-20 09:20:25
+Meowth used Pay-day!
+It dealt 31 damage to Vulpix!
+Vulpix used Take-down!
+It dealt 41 damage to Meowth!
+Meowth used Headbutt!
+It dealt 51 damage to Vulpix!
+Vulpix used Tackle!
+It dealt 19 damage to Meowth!
+Meowth used Headbutt!
+It dealt 54 damage to Vulpix!
+Vulpix fainted!
+
+Battle on 2025-02-20 09:20:30
+Meowth used Pay-day!
+It dealt 33 damage to Tentacool!
+Tentacool used Swords-dance!
+It dealt 0 damage to Meowth!
+Meowth used Headbutt!
+It dealt 57 damage to Tentacool!
+Tentacool fainted!
+
+Battle on 2025-02-20 09:20:35
+Meowth used Headbutt!
+It dealt 44 damage to Charmander!
+Charmander used Thunder-punch!
+It dealt 45 damage to Meowth!
+Meowth used Headbutt!
+It dealt 46 damage to Charmander!
+Charmander fainted!
+
