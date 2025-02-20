@@ -72,16 +72,19 @@ class PokemonSelection:
         """Charge les données et sprites des Pokémon"""
         for name, data in SPECIES_DATA.items():
             try:
+                # Convertir le nom en français en respectant la casse
+                fr_name = POKEMON_NAMES_FR.get(name.lower(), name)
+                
                 # Utiliser le sprite statique pour la sélection
                 sprite = self.sprite_manager.get_sprite(
-                    POKEMON_NAMES_FR.get(name, name),
+                    fr_name,
                     animated=False,
                     is_back=False
                 )
                 
                 if sprite:
                     pokemon = {
-                        'name': POKEMON_NAMES_FR.get(name, name),
+                        'name': fr_name,  # Utiliser le nom français correct
                         'sprite': sprite,
                         'data': data
                     }
@@ -104,6 +107,29 @@ class PokemonSelection:
             "voltorb": 100, "oddish": 43, "paras": 46, "venonat": 48
         }
         return pokemon_ids.get(name, 1)
+
+    def get_pokemon_data(self, pokemon_name_fr):
+        print(f"\nDEBUG: Recherche données pour {pokemon_name_fr}")
+        print(f"SPECIES_DATA keys: {list(SPECIES_DATA.keys())}")
+        print(f"POKEMON_NAMES_FR: {POKEMON_NAMES_FR}")
+        
+        pokemon_name_en = None
+        for en_name, fr_name in POKEMON_NAMES_FR.items():
+            print(f"Comparaison: {fr_name.lower()} == {pokemon_name_fr.lower()}")
+            if fr_name.lower() == pokemon_name_fr.lower():
+                pokemon_name_en = en_name
+                print(f"Match trouvé! {pokemon_name_fr} -> {pokemon_name_en}")
+                break
+        
+        if pokemon_name_en:
+            print(f"Recherche dans SPECIES_DATA avec clé: {pokemon_name_en.lower()}")
+            if pokemon_name_en.lower() in SPECIES_DATA:
+                data = SPECIES_DATA[pokemon_name_en.lower()].copy()
+                print(f"Données trouvées: {data}")
+                return data
+        
+        print(f"❌ Aucune donnée trouvée pour {pokemon_name_fr}")
+        return None
 
     def draw(self):
         # Fond noir
@@ -241,3 +267,19 @@ class PokemonSelection:
             }
             selected.append(pokemon_data)
         return selected 
+
+    def handle_pokemon_selection(self):
+        """Gère la sélection des Pokémon"""
+        pokemon = self.available_pokemon[self.selected_pokemon]
+        
+        # Trouver la clé anglaise pour ce Pokémon
+        pokemon_name_en = None
+        for en_name, fr_name in POKEMON_NAMES_FR.items():
+            if fr_name == pokemon['name']:
+                pokemon_name_en = en_name
+                break
+        
+        if pokemon_name_en and pokemon_name_en in SPECIES_DATA:
+            data = SPECIES_DATA[pokemon_name_en].copy()
+            data['name'] = pokemon['name']  # Garder le nom français
+            self.selected_team.append(data) 

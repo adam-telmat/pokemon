@@ -61,6 +61,10 @@ class OlgaArena:
         
         # Charger les sprites des Pokémon
         self.load_pokemon_sprites()
+        
+        # Initialiser le son
+        self.battle_music = pygame.mixer.Sound("src/assets/sounds/111_battlezik.wav")
+        self.battle_music_channel = None
     
     def load_pokemon_sprites(self):
         """Charge les sprites des Pokémon actuels"""
@@ -469,19 +473,25 @@ class OlgaArena:
         self.screen.blit(return_text, return_rect)
 
     def run(self):
+        # Démarrer la musique en boucle
+        self.battle_music_channel = self.battle_music.play(-1)  # -1 pour jouer en boucle
+        
         running = True
+        result = None
         while running:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    return "QUIT"
+                if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    # Arrêter la musique avant de quitter
+                    if self.battle_music_channel:
+                        self.battle_music_channel.stop()
+                    return "QUIT" if event.type == pygame.QUIT else "BACK"
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        return "BACK"
-                    elif event.key == pygame.K_RETURN:
+                    if event.key == pygame.K_RETURN:
                         if self.battle_state == "INTRO" and self.intro_state == "BATTLE_START":
                             self.battle_state = "BATTLE"
                         elif self.battle_state == "END":
-                            return self.battle_result
+                            result = self.battle_result
+                            running = False
                 
                 # Si on est en combat, gérer les inputs du combat
                 if self.battle_state == "BATTLE":
@@ -495,4 +505,9 @@ class OlgaArena:
             elif self.battle_state == "END":
                 self.draw_battle_end()
             
-            pygame.display.flip() 
+            pygame.display.flip()
+        
+        # Arrêter la musique avant de retourner au menu
+        if self.battle_music_channel:
+            self.battle_music_channel.stop()
+        return result 

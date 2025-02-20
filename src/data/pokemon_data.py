@@ -213,4 +213,14 @@ TYPE_NAMES_FR = {
     "dark": "Ténèbres",
     "steel": "Acier",
     "fairy": "Fée"
+}
+
+# Il faut ajouter un dictionnaire de correspondance nom français -> nom anglais
+POKEMON_NAMES = {
+    "Salamèche": "Charmander",
+    "Carapuce": "Squirtle",
+    "Bulbizarre": "Bulbasaur",
+    "Paras": "Paras",  # Celui-ci marche car même nom
+    "Tentacool": "Tentacool",  # Celui-ci devrait marcher aussi car même nom
+    # etc...
 } 

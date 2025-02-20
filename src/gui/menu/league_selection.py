@@ -284,3 +284,10 @@ class LeagueSelection:
             
             self.draw()
             pygame.display.flip() 
+
+    def handle_pokemon_selection(self):
+        """Gère la sélection des Pokémon"""
+        # Ajouter le Pokémon sélectionné à l'équipe
+        if len(self.selected_team) < 6:  # Changé à 6 pour respecter les règles Pokémon
+            pokemon_data = self.get_pokemon_data(self.available_pokemon[self.selected_pokemon])
+            self.selected_team.append(pokemon_data) 
