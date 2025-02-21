@@ -1,34 +1,27 @@
 import pygame
 import math
 import random
+import copy
 from data.trainer_teams import OLGA_TEAM
 from utils.SpriteManager import SpriteManager
 from utils.ProfileManager import ProfileManager
 
 class OlgaArena:
     def __init__(self, screen, player_team):
-        # Utiliser la fenêtre existante au lieu d'en créer une nouvelle
+        # Initialisation de base
         self.screen = screen
         self.current_width = screen.get_width()
         self.current_height = screen.get_height()
         
+        # Équipes
         self.player_team = player_team
-        self.sprite_manager = SpriteManager()
+        self.opponent_team = copy.deepcopy(OLGA_TEAM)
         
-        # État de l'intro
-        self.intro_state = "TRAINER_APPEAR"  # États: TRAINER_APPEAR -> TRAINER_SPEAK -> BATTLE_START -> BATTLE
-        self.intro_timer = pygame.time.get_ticks()
-        self.intro_duration = 2000  # 2 secondes par état
+        # Debug: vérifier les PV
+        for pokemon in self.opponent_team:
+            print(f"PV de {pokemon['name']}: {pokemon['current_hp']}/{pokemon['max_hp']}")
         
-        # Charger le sprite d'Olga
-        self.trainer_sprite = self.sprite_manager.get_trainer_sprite("olga")
-        self.trainer_pos = (3*self.current_width//4, self.current_height//2)
-        
-        # Positions des Pokémon (plus haut pour être visibles)
-        self.player_pokemon_pos = (self.current_width//4, self.current_height - 300)  # Remonté de 200 à 300
-        self.opponent_pokemon_pos = (3*self.current_width//4, 200)
-        
-        # État du combat
+        # États du combat
         self.current_pokemon = 0
         self.opponent_pokemon = 0
         self.battle_state = "INTRO"
@@ -38,7 +31,43 @@ class OlgaArena:
         
         # Menu de combat (en bas de l'écran)
         self.menu_options = ["ATTAQUE", "POKEMON", "SAC", "FUITE"]
-        self.menu_rect = pygame.Rect(0, self.current_height - 150, self.current_width, 150)
+        self.menu_rect = pygame.Rect(0, self.current_height - 150, self.current_width, 150)  # Ajout ici !
+        
+        # Sprite Manager
+        self.sprite_manager = SpriteManager()
+        
+        # État de l'intro
+        self.intro_state = "TRAINER_APPEAR"
+        self.intro_timer = pygame.time.get_ticks()
+        self.intro_duration = 2000
+        
+        # Charger le sprite d'Olga
+        try:
+            self.trainer_sprite = pygame.image.load("src/assets/olga.png").convert_alpha()
+            self.trainer_sprite = pygame.transform.scale(self.trainer_sprite, (300, 450))
+            print("Sprite d'Olga chargé avec succès")
+        except Exception as e:
+            print(f"Erreur lors du chargement du sprite d'Olga: {e}")
+            self.trainer_sprite = None
+        
+        # Position d'Olga
+        self.trainer_pos = (self.current_width//2 - 100, self.current_height//2 - 100)
+        
+        # Positions des Pokémon
+        self.player_pokemon_pos = (self.current_width//4, self.current_height - 300)
+        self.opponent_pokemon_pos = (3*self.current_width//4, 200)
+        
+        # Initialiser le son
+        self.battle_music = pygame.mixer.Sound("src/assets/sounds/111_battlezik.wav")
+        self.battle_music_channel = None
+        
+        # Message de fuite
+        self.escape_message = None
+        self.message_timer = 0
+        self.message_duration = 2000
+        
+        # Charger les sprites des Pokémon
+        self.load_pokemon_sprites()  # Maintenant ça devrait marcher !
         
         # Couleurs
         self.WHITE = (255, 255, 255)
@@ -51,25 +80,20 @@ class OlgaArena:
         try:
             font_path = "src/assets/fonts/pokemon.ttf"
             self.font = pygame.font.Font(font_path, 36)
+            self.olga_font = pygame.font.Font(font_path, 48)  # Police plus grande pour Olga !
         except:
             self.font = pygame.font.Font(None, 36)
+            self.olga_font = pygame.font.Font(None, 48)
         
         # Animation des sprites
         self.animation_frame = 0
         self.animation_timer = 0
         self.animation_delay = 200  # Délai entre les frames en millisecondes
-        
-        # Charger les sprites des Pokémon
-        self.load_pokemon_sprites()
-        
-        # Initialiser le son
-        self.battle_music = pygame.mixer.Sound("src/assets/sounds/111_battlezik.wav")
-        self.battle_music_channel = None
     
     def load_pokemon_sprites(self):
         """Charge les sprites des Pokémon actuels"""
         player_pokemon = self.player_team[self.current_pokemon]
-        opponent_pokemon = OLGA_TEAM[self.opponent_pokemon]
+        opponent_pokemon = self.opponent_team[self.opponent_pokemon]
         
         # Charger les sprites animés
         self.player_sprite = self.sprite_manager.get_sprite(
@@ -129,6 +153,21 @@ class OlgaArena:
         # Menu de combat et barres de vie
         self.draw_battle_menu()
         self.draw_health_bars()
+        
+        # Afficher le message de fuite s'il existe
+        if self.escape_message and current_time - self.message_timer < self.message_duration:
+            # Créer une surface semi-transparente pour le fond du message
+            message_surface = pygame.Surface((self.current_width, 100))
+            message_surface.set_alpha(200)
+            message_surface.fill((0, 0, 0))  # Fond noir
+            self.screen.blit(message_surface, (0, self.current_height//2 - 50))
+            
+            # Afficher le message
+            text = self.font.render(self.escape_message, True, (255, 255, 255))  # Texte blanc
+            text_rect = text.get_rect(center=(self.current_width//2, self.current_height//2))
+            self.screen.blit(text, text_rect)
+        elif self.escape_message:
+            self.escape_message = None  # Effacer le message après la durée
     
     def draw_battle_menu(self):
         """Affiche le menu de combat"""
@@ -163,7 +202,7 @@ class OlgaArena:
     def draw_health_bars(self):
         """Dessine les barres de vie des Pokémon"""
         player_pokemon = self.player_team[self.current_pokemon]
-        opponent_pokemon = OLGA_TEAM[self.opponent_pokemon]
+        opponent_pokemon = self.opponent_team[self.opponent_pokemon]
         
         # Dessiner la barre de vie du joueur
         pygame.draw.rect(self.screen, self.WHITE, (50, 400, 300, 20), border_radius=5)
@@ -237,8 +276,9 @@ class OlgaArena:
             # Pour l'instant, on ne fait rien avec le sac
             pass
         elif self.menu_options[self.selected_option] == "FUITE":
-            # Message de fuite impossible contre un dresseur
-            print("Impossible de fuir un combat de dresseur !")
+            # Afficher le message dans le jeu
+            self.escape_message = "Impossible de fuir un combat de dresseur !"
+            self.message_timer = pygame.time.get_ticks()
     
     def handle_move_selection(self, key):
         """Gère la sélection des attaques"""
@@ -255,7 +295,7 @@ class OlgaArena:
     def execute_move(self):
         """Exécute l'attaque sélectionnée"""
         player_pokemon = self.player_team[self.current_pokemon]
-        opponent_pokemon = OLGA_TEAM[self.opponent_pokemon]
+        opponent_pokemon = self.opponent_team[self.opponent_pokemon]
         move = player_pokemon["moves"][self.selected_move]
         
         # Message d'attaque
@@ -268,7 +308,7 @@ class OlgaArena:
         # Vérifier si le Pokémon adverse est K.O.
         if opponent_pokemon["current_hp"] <= 0:
             print(f"{opponent_pokemon['name']} est K.O. !")
-            if self.opponent_pokemon + 1 < len(OLGA_TEAM):
+            if self.opponent_pokemon + 1 < len(self.opponent_team):
                 self.opponent_pokemon += 1
                 # Charger le sprite du nouveau Pokémon
                 self.load_pokemon_sprites()
@@ -350,7 +390,7 @@ class OlgaArena:
 
     def opponent_turn(self):
         """Gère le tour d'Olga"""
-        opponent_pokemon = OLGA_TEAM[self.opponent_pokemon]
+        opponent_pokemon = self.opponent_team[self.opponent_pokemon]
         player_pokemon = self.player_team[self.current_pokemon]
         
         # Choisir une attaque aléatoire
@@ -407,12 +447,19 @@ class OlgaArena:
         current_time = pygame.time.get_ticks()
         
         if self.intro_state == "TRAINER_APPEAR":
-            # Fond glacé
-            self.screen.fill(self.ICE_BLUE)
+            # Fond glacé plus sombre pour plus de dramatisme
+            self.screen.fill((100, 150, 200))
             
-            # Afficher Olga
+            # Effet de flash glacé
+            if (current_time // 200) % 2:
+                pygame.draw.rect(self.screen, (200, 220, 255), (0, 0, self.current_width, self.current_height//4))
+            
+            # Afficher Olga avec un effet d'apparition progressive
             if self.trainer_sprite:
-                self.screen.blit(self.trainer_sprite, self.trainer_pos)
+                alpha = min(255, (current_time - self.intro_timer) // 3)
+                sprite_copy = self.trainer_sprite.copy()
+                sprite_copy.set_alpha(alpha)
+                self.screen.blit(sprite_copy, self.trainer_pos)
             
             if current_time - self.intro_timer > self.intro_duration:
                 self.intro_state = "TRAINER_SPEAK"
@@ -420,17 +467,29 @@ class OlgaArena:
         
         elif self.intro_state == "TRAINER_SPEAK":
             # Fond glacé
-            self.screen.fill(self.ICE_BLUE)
+            self.screen.fill((100, 150, 200))
             
             # Afficher Olga
             if self.trainer_sprite:
                 self.screen.blit(self.trainer_sprite, self.trainer_pos)
             
-            # Message de bienvenue
-            welcome_text = self.font.render("Bienvenue dans mon arène de glace !", True, self.BLACK)
-            welcome_rect = welcome_text.get_rect(center=(self.current_width//2, 100))
-            self.screen.blit(welcome_text, welcome_rect)
+            # Messages plus intimidants avec animation
+            messages = [
+                "Je suis Olga, Maîtresse des Pokémon Glace !",
+                "Dans mon arène, même les plus ardents",
+                "combattants finissent gelés..."
+            ]
             
+            for i, message in enumerate(messages):
+                text = self.olga_font.render(message, True, (220, 220, 255))
+                shadow = self.olga_font.render(message, True, (0, 0, 100))
+                pos_y = 50 + i * 60
+                
+                # Effet d'ombre
+                self.screen.blit(shadow, (self.current_width//2 - text.get_width()//2 + 2, pos_y + 2))
+                self.screen.blit(text, (self.current_width//2 - text.get_width()//2, pos_y))
+            
+            # Passer automatiquement à l'état suivant après la durée
             if current_time - self.intro_timer > self.intro_duration:
                 self.intro_state = "BATTLE_START"
                 self.intro_timer = current_time
