@@ -95,6 +95,15 @@ class OlgaArena:
         self.message_timer = pygame.time.get_ticks()
         self.message_duration = 1500  # Durée d'affichage des messages (1.5 secondes)
         self.waiting_for_opponent = False  # Pour gérer le tour de l'adversaire
+        
+        # Ajouter des variables pour l'animation d'attaque
+        self.attacking = False
+        self.attack_animation_start = 0
+        self.attack_animation_duration = 1000  # 1 seconde pour l'animation complète
+        self.attacker_original_pos = None
+        self.attack_target_pos = None
+        self.current_attacker_pos = None
+        self.is_player_attacking = False
     
     def load_pokemon_sprites(self):
         """Charge les sprites des Pokémon actuels"""
@@ -130,31 +139,91 @@ class OlgaArena:
             self.animation_frame = (self.animation_frame + 1) % 2
             self.animation_timer = current_time
         
-        # Pokémon du joueur
-        if self.player_sprite:
-            try:
-                if isinstance(self.player_sprite, list) and len(self.player_sprite) > 0:
-                    frame = self.player_sprite[self.animation_frame % len(self.player_sprite)]
-                    sprite_rect = frame.get_rect()
-                    sprite_rect.center = self.player_pokemon_pos
-                    self.screen.blit(frame, sprite_rect)
+        if self.attacking:
+            current_time = pygame.time.get_ticks()
+            elapsed = current_time - self.attack_animation_start
+            progress = min(1.0, elapsed / self.attack_animation_duration)
+            
+            if progress < 0.25:  # Aller vers la cible
+                t = progress * 4
+                x = self.attacker_original_pos[0] + (self.attack_target_pos[0] - self.attacker_original_pos[0]) * t
+                y = self.attacker_original_pos[1] + (self.attack_target_pos[1] - self.attacker_original_pos[1]) * t
+                self.current_attacker_pos = (x, y)
+            elif progress < 0.5:  # Rester sur place pour "frapper"
+                self.current_attacker_pos = self.attack_target_pos
+            elif progress < 0.75:  # Retourner à la position initiale
+                t = (progress - 0.5) * 4
+                x = self.attack_target_pos[0] + (self.attacker_original_pos[0] - self.attack_target_pos[0]) * t
+                y = self.attack_target_pos[1] + (self.attacker_original_pos[1] - self.attack_target_pos[1]) * t
+                self.current_attacker_pos = (x, y)
+            else:  # Animation terminée
+                self.current_attacker_pos = self.attacker_original_pos
+                self.attacking = False
+                
+                # Appliquer les dégâts après l'animation
+                if self.is_player_attacking:
+                    # Dégâts du joueur
+                    player_pokemon = self.player_team[self.current_pokemon]
+                    opponent_pokemon = self.opponent_team[self.opponent_pokemon]
+                    damage = self.calculate_damage(self.current_move, player_pokemon, opponent_pokemon)
+                    opponent_pokemon["current_hp"] = max(0, opponent_pokemon["current_hp"] - damage)
+                    
+                    # Vérifier si le Pokémon adverse est K.O.
+                    if opponent_pokemon["current_hp"] <= 0:
+                        self.battle_message = f"{opponent_pokemon['name']} est K.O. !"
+                        if self.opponent_pokemon + 1 < len(self.opponent_team):
+                            self.opponent_pokemon += 1
+                            self.load_pokemon_sprites()
+                        else:
+                            self.show_battle_end("VICTORY")
+                            return
+                    
+                    # Passer au tour d'Olga
+                    self.waiting_for_opponent = True
+                    self.message_timer = pygame.time.get_ticks()
+                    self.battle_message = "Au tour d'Olga !"
                 else:
-                    self.screen.blit(self.player_sprite, self.player_pokemon_pos)
-            except Exception as e:
-                print(f"Erreur affichage sprite joueur: {e}")
+                    # Dégâts d'Olga
+                    opponent_pokemon = self.opponent_team[self.opponent_pokemon]
+                    player_pokemon = self.player_team[self.current_pokemon]
+                    damage = self.calculate_damage(self.current_move, opponent_pokemon, player_pokemon)
+                    player_pokemon["current_hp"] = max(0, player_pokemon["current_hp"] - damage)
+                    
+                    # Vérifier si notre Pokémon est K.O.
+                    if player_pokemon["current_hp"] <= 0:
+                        self.battle_message = f"{player_pokemon['name']} est K.O. !"
+                        # Chercher le prochain Pokémon non K.O.
+                        next_pokemon_found = False
+                        for i in range(self.current_pokemon + 1, len(self.player_team)):
+                            if self.player_team[i]["current_hp"] > 0:
+                                self.current_pokemon = i
+                                next_pokemon_found = True
+                                self.battle_message = f"À toi, {self.player_team[i]['name']} !"
+                                self.load_pokemon_sprites()
+                                break
+                        
+                        if not next_pokemon_found:
+                            self.show_battle_end("DEFEAT")
+                            return
+                    
+                    # Retour au menu principal
+                    self.battle_menu_state = "MAIN"
+                    self.selected_move = 0
         
-        # Pokémon d'Olga
-        if self.opponent_sprite:
-            try:
-                if isinstance(self.opponent_sprite, list) and len(self.opponent_sprite) > 0:
-                    frame = self.opponent_sprite[self.animation_frame % len(self.opponent_sprite)]
-                    sprite_rect = frame.get_rect()
-                    sprite_rect.center = self.opponent_pokemon_pos
-                    self.screen.blit(frame, sprite_rect)
-                else:
-                    self.screen.blit(self.opponent_sprite, self.opponent_pokemon_pos)
-            except Exception as e:
-                print(f"Erreur affichage sprite adversaire: {e}")
+        # Dessiner les sprites à leur position actuelle
+        if self.attacking:
+            if self.is_player_attacking:
+                # Si c'est le joueur qui attaque
+                self.draw_pokemon_sprite(self.opponent_sprite, self.opponent_pokemon_pos, False)
+                self.draw_pokemon_sprite(self.player_sprite, self.current_attacker_pos, True)
+            else:
+                # Si c'est Olga qui attaque
+                self.draw_pokemon_sprite(self.player_sprite, self.player_pokemon_pos, True)
+                self.draw_pokemon_sprite(self.opponent_sprite, self.current_attacker_pos, False)
+        else:
+            # Position normale
+            self.draw_pokemon_sprite(self.player_sprite, self.player_pokemon_pos, True)
+            self.draw_pokemon_sprite(self.opponent_sprite, self.opponent_pokemon_pos, False)
         
         # Menu de combat et barres de vie
         self.draw_battle_menu()
@@ -326,32 +395,43 @@ class OlgaArena:
         opponent_pokemon = self.opponent_team[self.opponent_pokemon]
         move = player_pokemon["moves"][self.selected_move]
         
-        # Annoncer le tour du joueur
-        self.battle_message = "À vous de jouer !"
-        self.message_timer = pygame.time.get_ticks()
+        # Démarrer l'animation d'attaque
+        self.attacking = True
+        self.attack_animation_start = pygame.time.get_ticks()
+        self.is_player_attacking = True
+        self.attacker_original_pos = self.player_pokemon_pos
+        self.attack_target_pos = self.opponent_pokemon_pos
+        self.current_attacker_pos = self.player_pokemon_pos
         
-        # Attendre un peu puis annoncer l'attaque
+        # Message d'attaque
         self.battle_message = f"{player_pokemon['name']} utilise {move['name']} !"
         self.message_timer = pygame.time.get_ticks()
         
-        # Calculer les dégâts
-        damage = self.calculate_damage(move, player_pokemon, opponent_pokemon)
-        opponent_pokemon["current_hp"] = max(0, opponent_pokemon["current_hp"] - damage)
+        # Stocker le move pour l'utiliser après l'animation
+        self.current_move = move
+
+    def opponent_turn(self):
+        """Gère le tour d'Olga"""
+        opponent_pokemon = self.opponent_team[self.opponent_pokemon]
+        player_pokemon = self.player_team[self.current_pokemon]
         
-        # Vérifier si le Pokémon adverse est K.O.
-        if opponent_pokemon["current_hp"] <= 0:
-            self.battle_message = f"{opponent_pokemon['name']} est K.O. !"
-            if self.opponent_pokemon + 1 < len(self.opponent_team):
-                self.opponent_pokemon += 1
-                self.load_pokemon_sprites()
-            else:
-                self.show_battle_end("VICTORY")
-            return
+        # Choisir une attaque aléatoire
+        move = random.choice(opponent_pokemon["moves"])
         
-        # Annoncer le tour d'Olga
-        self.waiting_for_opponent = True
+        # Démarrer l'animation d'attaque
+        self.attacking = True
+        self.attack_animation_start = pygame.time.get_ticks()
+        self.is_player_attacking = False
+        self.attacker_original_pos = self.opponent_pokemon_pos
+        self.attack_target_pos = self.player_pokemon_pos
+        self.current_attacker_pos = self.opponent_pokemon_pos
+        
+        # Message d'attaque
+        self.battle_message = f"{opponent_pokemon['name']} utilise {move['name']} !"
         self.message_timer = pygame.time.get_ticks()
-        self.battle_message = "Au tour d'Olga !"
+        
+        # Stocker le move pour l'utiliser après l'animation
+        self.current_move = move
 
     def calculate_damage(self, move, attacker, defender):
         """Calcule les dégâts selon la formule officielle Pokémon"""
@@ -417,39 +497,6 @@ class OlgaArena:
         except Exception as e:
             print(f"Erreur dans le calcul des dégâts: {e}")
             return 0
-
-    def opponent_turn(self):
-        """Gère le tour d'Olga"""
-        opponent_pokemon = self.opponent_team[self.opponent_pokemon]
-        player_pokemon = self.player_team[self.current_pokemon]
-        
-        # Choisir une attaque aléatoire
-        move = random.choice(opponent_pokemon["moves"])
-        
-        # Annoncer l'attaque
-        self.battle_message = f"{opponent_pokemon['name']} utilise {move['name']} !"
-        self.message_timer = pygame.time.get_ticks()
-        
-        # Calculer et appliquer les dégâts
-        damage = self.calculate_damage(move, opponent_pokemon, player_pokemon)
-        player_pokemon["current_hp"] = max(0, player_pokemon["current_hp"] - damage)
-        
-        # Vérifier si notre Pokémon est K.O.
-        if player_pokemon["current_hp"] <= 0:
-            self.battle_message = f"{player_pokemon['name']} est K.O. !"
-            
-            # Chercher le prochain Pokémon non K.O.
-            next_pokemon_found = False
-            for i in range(self.current_pokemon + 1, len(self.player_team)):
-                if self.player_team[i]["current_hp"] > 0:
-                    self.current_pokemon = i
-                    next_pokemon_found = True
-                    self.battle_message = f"À toi, {self.player_team[i]['name']} !"
-                    self.load_pokemon_sprites()
-                    break
-            
-            if not next_pokemon_found:
-                self.show_battle_end("DEFEAT")
 
     def calculate_type_effectiveness(self, move_type, defender_types):
         """Calcule l'efficacité du type selon la table des types Pokémon"""
@@ -568,6 +615,14 @@ class OlgaArena:
         return_text = self.font.render("Appuyez sur ENTRÉE pour continuer", True, self.BLACK)
         return_rect = return_text.get_rect(center=(self.current_width//2, self.current_height//2 + 50))
         self.screen.blit(return_text, return_rect)
+
+    def draw_pokemon_sprite(self, sprite, position, is_player):
+        """Dessine un sprite de Pokémon à la position donnée"""
+        if sprite and isinstance(sprite, list) and len(sprite) > 0:
+            frame = sprite[self.animation_frame % len(sprite)]
+            sprite_rect = frame.get_rect()
+            sprite_rect.center = position
+            self.screen.blit(frame, sprite_rect)
 
     def run(self):
         # Démarrer la musique en boucle
