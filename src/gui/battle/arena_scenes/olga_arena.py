@@ -89,6 +89,12 @@ class OlgaArena:
         self.animation_frame = 0
         self.animation_timer = 0
         self.animation_delay = 200  # Délai entre les frames en millisecondes
+        
+        # Ajouter des variables pour gérer les messages de tour
+        self.battle_message = None
+        self.message_timer = pygame.time.get_ticks()
+        self.message_duration = 1500  # Durée d'affichage des messages (1.5 secondes)
+        self.waiting_for_opponent = False  # Pour gérer le tour de l'adversaire
     
     def load_pokemon_sprites(self):
         """Charge les sprites des Pokémon actuels"""
@@ -168,6 +174,25 @@ class OlgaArena:
             self.screen.blit(text, text_rect)
         elif self.escape_message:
             self.escape_message = None  # Effacer le message après la durée
+        
+        # Afficher le message de combat
+        if self.battle_message and current_time - self.message_timer < self.message_duration:
+            # Fond semi-transparent pour le message
+            message_surface = pygame.Surface((self.current_width, 100))
+            message_surface.set_alpha(200)
+            message_surface.fill((0, 0, 0))
+            self.screen.blit(message_surface, (0, self.current_height//2 - 50))
+            
+            # Afficher le message
+            text = self.font.render(self.battle_message, True, (255, 255, 255))
+            text_rect = text.get_rect(center=(self.current_width//2, self.current_height//2))
+            self.screen.blit(text, text_rect)
+        elif self.waiting_for_opponent and current_time - self.message_timer > self.message_duration:
+            # Exécuter le tour de l'adversaire après l'affichage du message
+            self.opponent_turn()
+            self.waiting_for_opponent = False
+            self.battle_menu_state = "MAIN"
+            self.selected_move = 0
     
     def draw_battle_menu(self):
         """Affiche le menu de combat"""
@@ -276,9 +301,12 @@ class OlgaArena:
             # Pour l'instant, on ne fait rien avec le sac
             pass
         elif self.menu_options[self.selected_option] == "FUITE":
-            # Afficher le message dans le jeu
+            # Afficher uniquement le message de fuite
+            self.battle_message = None  # Effacer tout message de combat en cours
+            self.waiting_for_opponent = False  # Ne pas déclencher le tour de l'adversaire
             self.escape_message = "Impossible de fuir un combat de dresseur !"
             self.message_timer = pygame.time.get_ticks()
+            self.battle_menu_state = "MAIN"
     
     def handle_move_selection(self, key):
         """Gère la sélection des attaques"""
@@ -298,8 +326,13 @@ class OlgaArena:
         opponent_pokemon = self.opponent_team[self.opponent_pokemon]
         move = player_pokemon["moves"][self.selected_move]
         
-        # Message d'attaque
-        print(f"{player_pokemon['name']} utilise {move['name']} !")
+        # Annoncer le tour du joueur
+        self.battle_message = "À vous de jouer !"
+        self.message_timer = pygame.time.get_ticks()
+        
+        # Attendre un peu puis annoncer l'attaque
+        self.battle_message = f"{player_pokemon['name']} utilise {move['name']} !"
+        self.message_timer = pygame.time.get_ticks()
         
         # Calculer les dégâts
         damage = self.calculate_damage(move, player_pokemon, opponent_pokemon)
@@ -307,21 +340,18 @@ class OlgaArena:
         
         # Vérifier si le Pokémon adverse est K.O.
         if opponent_pokemon["current_hp"] <= 0:
-            print(f"{opponent_pokemon['name']} est K.O. !")
+            self.battle_message = f"{opponent_pokemon['name']} est K.O. !"
             if self.opponent_pokemon + 1 < len(self.opponent_team):
                 self.opponent_pokemon += 1
-                # Charger le sprite du nouveau Pokémon
                 self.load_pokemon_sprites()
             else:
                 self.show_battle_end("VICTORY")
-                return
+            return
         
-        # Tour de l'adversaire
-        self.opponent_turn()
-        
-        # Retour au menu principal
-        self.battle_menu_state = "MAIN"
-        self.selected_move = 0
+        # Annoncer le tour d'Olga
+        self.waiting_for_opponent = True
+        self.message_timer = pygame.time.get_ticks()
+        self.battle_message = "Au tour d'Olga !"
 
     def calculate_damage(self, move, attacker, defender):
         """Calcule les dégâts selon la formule officielle Pokémon"""
@@ -396,8 +426,9 @@ class OlgaArena:
         # Choisir une attaque aléatoire
         move = random.choice(opponent_pokemon["moves"])
         
-        # Message d'attaque
-        print(f"{opponent_pokemon['name']} utilise {move['name']} !")
+        # Annoncer l'attaque
+        self.battle_message = f"{opponent_pokemon['name']} utilise {move['name']} !"
+        self.message_timer = pygame.time.get_ticks()
         
         # Calculer et appliquer les dégâts
         damage = self.calculate_damage(move, opponent_pokemon, player_pokemon)
@@ -405,12 +436,19 @@ class OlgaArena:
         
         # Vérifier si notre Pokémon est K.O.
         if player_pokemon["current_hp"] <= 0:
-            print(f"{player_pokemon['name']} est K.O. !")
-            if self.current_pokemon + 1 < len(self.player_team):
-                self.current_pokemon += 1
-                # Charger le sprite du nouveau Pokémon
-                self.load_pokemon_sprites()
-            else:
+            self.battle_message = f"{player_pokemon['name']} est K.O. !"
+            
+            # Chercher le prochain Pokémon non K.O.
+            next_pokemon_found = False
+            for i in range(self.current_pokemon + 1, len(self.player_team)):
+                if self.player_team[i]["current_hp"] > 0:
+                    self.current_pokemon = i
+                    next_pokemon_found = True
+                    self.battle_message = f"À toi, {self.player_team[i]['name']} !"
+                    self.load_pokemon_sprites()
+                    break
+            
+            if not next_pokemon_found:
                 self.show_battle_end("DEFEAT")
 
     def calculate_type_effectiveness(self, move_type, defender_types):
