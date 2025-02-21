@@ -80,10 +80,12 @@ class OlgaArena:
         try:
             font_path = "src/assets/fonts/pokemon.ttf"
             self.font = pygame.font.Font(font_path, 36)
-            self.olga_font = pygame.font.Font(font_path, 48)  # Police plus grande pour Olga !
+            self.olga_font = pygame.font.Font(font_path, 48)
+            self.hp_font = pygame.font.Font(font_path, 42)  # Police plus grande pour les PV
         except:
             self.font = pygame.font.Font(None, 36)
             self.olga_font = pygame.font.Font(None, 48)
+            self.hp_font = pygame.font.Font(None, 42)
         
         # Animation des sprites
         self.animation_frame = 0
@@ -104,6 +106,22 @@ class OlgaArena:
         self.attack_target_pos = None
         self.current_attacker_pos = None
         self.is_player_attacking = False
+        
+        # Ajouter les sons d'attaque (sans fire blast)
+        self.attack_sounds = [
+            pygame.mixer.Sound("src/assets/sounds/008-0_ice_punch.wav"),
+            pygame.mixer.Sound("src/assets/sounds/055-0_water_gun.wav"),
+            pygame.mixer.Sound("src/assets/sounds/072-0_mega_drain.wav")
+        ]
+        
+        # Charger le fond d'arène glaciaire
+        try:
+            self.arena_background = pygame.image.load("src/assets/ice2_background.jpg").convert()
+            self.arena_background = pygame.transform.scale(self.arena_background, (self.current_width, self.current_height))
+            print("Fond d'arène glaciaire chargé avec succès")
+        except Exception as e:
+            print(f"Erreur lors du chargement du fond d'arène: {e}")
+            self.arena_background = None
     
     def load_pokemon_sprites(self):
         """Charge les sprites des Pokémon actuels"""
@@ -127,11 +145,14 @@ class OlgaArena:
     
     def draw_battle(self):
         """Affiche l'écran de combat"""
-        # Fond
-        self.screen.fill(self.ICE_BLUE)
+        # Afficher le fond
+        if self.arena_background:
+            self.screen.blit(self.arena_background, (0, 0))
+        else:
+            self.screen.fill(self.ICE_BLUE)  # Fallback au cas où l'image ne charge pas
         
-        # Terrain
-        pygame.draw.rect(self.screen, (180, 210, 235), (0, self.current_height//2 - 100, self.current_width, 200))
+        # Supprimer le rectangle de terrain car on a maintenant un beau fond
+        # pygame.draw.rect(self.screen, (180, 210, 235), (0, self.current_height//2 - 100, self.current_width, 200))
         
         # Animer les sprites
         current_time = pygame.time.get_ticks()
@@ -151,6 +172,9 @@ class OlgaArena:
                 self.current_attacker_pos = (x, y)
             elif progress < 0.5:  # Rester sur place pour "frapper"
                 self.current_attacker_pos = self.attack_target_pos
+                # Jouer un son d'attaque aléatoire au moment de l'impact
+                if progress < 0.38:  # Pour ne jouer le son qu'une fois
+                    random.choice(self.attack_sounds).play()
             elif progress < 0.75:  # Retourner à la position initiale
                 t = (progress - 0.5) * 4
                 x = self.attack_target_pos[0] + (self.attacker_original_pos[0] - self.attack_target_pos[0]) * t
@@ -299,23 +323,37 @@ class OlgaArena:
         opponent_pokemon = self.opponent_team[self.opponent_pokemon]
         
         # Dessiner la barre de vie du joueur
-        pygame.draw.rect(self.screen, self.WHITE, (50, 400, 300, 20), border_radius=5)
-        pygame.draw.rect(self.screen, self.RED, (50, 400, 300 * player_pokemon.get("current_hp", 100) / player_pokemon.get("max_hp", 100), 20), border_radius=5)
-        pygame.draw.rect(self.screen, self.BLACK, (50, 400, 300, 20), 2)
+        bar_y = 400
+        text_y = bar_y - 30  # Décalé un peu plus haut pour la police plus grande
+        
+        pygame.draw.rect(self.screen, self.WHITE, (50, bar_y, 300, 20), border_radius=5)
+        pygame.draw.rect(self.screen, self.RED, (50, bar_y, 300 * player_pokemon.get("current_hp", 100) / player_pokemon.get("max_hp", 100), 20), border_radius=5)
+        pygame.draw.rect(self.screen, self.BLACK, (50, bar_y, 300, 20), 2)
         
         # Dessiner la barre de vie d'Olga
-        pygame.draw.rect(self.screen, self.WHITE, (550, 200, 300, 20), border_radius=5)
-        pygame.draw.rect(self.screen, self.RED, (550, 200, 300 * opponent_pokemon.get("current_hp", 100) / opponent_pokemon.get("max_hp", 100), 20), border_radius=5)
-        pygame.draw.rect(self.screen, self.BLACK, (550, 200, 300, 20), 2)
+        opponent_bar_y = 200
+        opponent_text_y = opponent_bar_y - 30  # Décalé un peu plus haut
         
-        # Texte des barres de vie
-        player_health_text = self.font.render(f"{player_pokemon.get('current_hp', 0)}/{player_pokemon.get('max_hp', 0)}", True, self.BLACK)
-        player_health_rect = player_health_text.get_rect(midleft=(50, 400))
-        self.screen.blit(player_health_text, player_health_rect)
+        pygame.draw.rect(self.screen, self.WHITE, (550, opponent_bar_y, 300, 20), border_radius=5)
+        pygame.draw.rect(self.screen, self.RED, (550, opponent_bar_y, 300 * opponent_pokemon.get("current_hp", 100) / opponent_pokemon.get("max_hp", 100), 20), border_radius=5)
+        pygame.draw.rect(self.screen, self.BLACK, (550, opponent_bar_y, 300, 20), 2)
         
-        opponent_health_text = self.font.render(f"{opponent_pokemon.get('current_hp', 0)}/{opponent_pokemon.get('max_hp', 0)}", True, self.BLACK)
-        opponent_health_rect = opponent_health_text.get_rect(midright=(600, 200))
-        self.screen.blit(opponent_health_text, opponent_health_rect)
+        # Texte des barres de vie avec traits épais
+        # Dessiner le texte plusieurs fois avec un léger décalage pour l'épaissir
+        player_text = f"{player_pokemon.get('current_hp', 0)}/{player_pokemon.get('max_hp', 0)}"
+        opponent_text = f"{opponent_pokemon.get('current_hp', 0)}/{opponent_pokemon.get('max_hp', 0)}"
+        
+        # Joueur
+        for dx, dy in [(0,0), (1,0), (0,1), (1,1)]:  # 4 positions pour épaissir
+            text = self.hp_font.render(player_text, True, (0, 0, 0))
+            rect = text.get_rect(midleft=(50 + dx, text_y + dy))
+            self.screen.blit(text, rect)
+        
+        # Adversaire
+        for dx, dy in [(0,0), (1,0), (0,1), (1,1)]:  # 4 positions pour épaissir
+            text = self.hp_font.render(opponent_text, True, (0, 0, 0))
+            rect = text.get_rect(midright=(850 + dx, opponent_text_y + dy))
+            self.screen.blit(text, rect)
     
     def handle_battle_input(self, event):
         """Gère les entrées pendant le combat"""
@@ -532,12 +570,18 @@ class OlgaArena:
         current_time = pygame.time.get_ticks()
         
         if self.intro_state == "TRAINER_APPEAR":
-            # Fond glacé plus sombre pour plus de dramatisme
-            self.screen.fill((100, 150, 200))
+            # Utiliser le fond glacé au lieu du fond bleu
+            if self.arena_background:
+                self.screen.blit(self.arena_background, (0, 0))
+            else:
+                self.screen.fill((100, 150, 200))
             
             # Effet de flash glacé
             if (current_time // 200) % 2:
-                pygame.draw.rect(self.screen, (200, 220, 255), (0, 0, self.current_width, self.current_height//4))
+                flash_surface = pygame.Surface((self.current_width, self.current_height//4))
+                flash_surface.fill((200, 220, 255))
+                flash_surface.set_alpha(100)
+                self.screen.blit(flash_surface, (0, 0))
             
             # Afficher Olga avec un effet d'apparition progressive
             if self.trainer_sprite:
@@ -551,8 +595,11 @@ class OlgaArena:
                 self.intro_timer = current_time
         
         elif self.intro_state == "TRAINER_SPEAK":
-            # Fond glacé
-            self.screen.fill((100, 150, 200))
+            # Utiliser le fond glacé
+            if self.arena_background:
+                self.screen.blit(self.arena_background, (0, 0))
+            else:
+                self.screen.fill((100, 150, 200))
             
             # Afficher Olga
             if self.trainer_sprite:
